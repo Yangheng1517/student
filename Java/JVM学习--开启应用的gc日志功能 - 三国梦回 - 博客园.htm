@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://www.cnblogs.com/grey-wolf/p/10216014.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin">
+    <meta property="og:description" content="一、开启方法 For Java 1.4, 5, 6, 7, 8 pass this JVM argument to your application:&amp;#160;-XX:+PrintGCDetails">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园</title>
+    
+    <link rel="shortcut icon" href="https://common.cnblogs.com/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/blog-common.min.css">
+    <link id="MainCss" rel="stylesheet" href="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/bundle-coffee.min.css">
+    <link type="text/css" rel="stylesheet" href="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/148538.css">
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/bundle-coffee-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/grey-wolf/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/grey-wolf/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/grey-wolf/wlwmanifest.xml">
+    <script src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/amp4ads-host-v0.js"></script><script src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/pubads_impl_rendering_2019080801.js"></script><script async="" src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/analytics.js"></script><script type="text/javascript" src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/encoder.js"></script><script src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/jquery-2.2.0.min.js"></script>
+    <script src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/blog-common.min.js"></script>
+    <script>
+        var currentBlogId = 148538;
+        var currentBlogApp = 'grey-wolf';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+    </script>
+    
+    
+    
+<link rel="preload" href="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/f.txt" as="script"><script type="text/javascript" src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/f.txt"></script><link rel="preload" href="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/f(1).txt" as="script"><script type="text/javascript" src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/f(1).txt"></script><script src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/pubads_impl_2019080801.js" async=""></script><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-35/html/container.html"></head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a href="https://www.cnblogs.com/grey-wolf/"><img id="blogLogo" src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1>
+<a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/grey-wolf/">低级知识传播者</a>
+</h1>
+<h2>
+实战问题分享，关注框架源码、网络编程、效率工具
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="navigator">
+			
+<ul id="navList">
+	<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+	<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/grey-wolf/">
+首页</a>
+</li>
+	<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+	<li>
+</li>
+	<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+	<li>
+
+	
+</li>
+</ul>
+
+
+
+			<div class="blogStats">
+				
+				<!--done-->
+随笔- 
+221&nbsp;
+文章- 
+34&nbsp;
+评论- 
+42&nbsp;
+
+
+
+				
+			</div><!--end: blogStats -->
+		</div><!--end: navigator 博客导航栏 -->
+		<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/grey-wolf/p/10216014.html">JVM学习--开启应用的gc日志功能</a>
+
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			
+<div id="cnblogs_post_body" class="blogpost-body "><a name="_labelTop"></a><div id="navCategory"><p style="font-size:18px"></p><h1 id="autoid-0-0-0">阅读目录</h1><p></p><ul><li><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#_label0">一、开启方法</a></li><li><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#_label1">&nbsp;</a></li><li><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#_label2">二、测试</a><ul><li><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#_label2_0">1、输出到标准输出</a></li><li><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#_label2_1">2、输出到文件</a></li></ul></li></ul></div><p> </p>
+    <div style="text-align: right"><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#_labelTop">回到顶部</a><a name="_label0"></a></div><h1 id="autoid-1-0-0">一、开启方法</h1>
+<p>For Java 1.4, 5, 6, 7, 8 pass this JVM argument to your application:&nbsp;<strong>-XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:&lt;file-path&gt;</strong></p>
+<p>For Java 9, pass the JVM argument:&nbsp;<strong>-Xlog:gc*:file=&lt;file-path&gt;</strong><br><strong>file-path:</strong>&nbsp;is the location where GC log file will be written</p>
+<p>&nbsp;</p>
+<p>&nbsp;如果是需要给运行中的JVM打开日志功能，可参考：</p>
+<p><a href="http://www.importnew.com/15722.html" target="_blank">http://www.importnew.com/15722.html</a></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#_labelTop">回到顶部</a><a name="_label1"></a></div><h1 id="autoid-2-0-0">&nbsp;</h1>
+<div style="text-align: right"><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#_labelTop">回到顶部</a><a name="_label2"></a></div><h1 id="autoid-3-0-0">二、测试</h1>
+<p>&nbsp;</p>
+<p>代码：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000;">public class testAllocation {
+    private static final </span><span style="color: #0000ff;">int</span> _1MB=<span style="color: #800080;">1024</span>*<span style="color: #800080;">1024</span><span style="color: #000000;">;
+
+    public static void main(String[] args) {
+        </span><span style="color: #0000ff;">byte</span><span style="color: #000000;">[] allocation1;
+        </span><span style="color: #0000ff;">byte</span><span style="color: #000000;">[] allocation2;
+        </span><span style="color: #0000ff;">byte</span><span style="color: #000000;">[] allocation3;
+        </span><span style="color: #0000ff;">byte</span><span style="color: #000000;">[] allocation4;
+        allocation1</span>=new <span style="color: #0000ff;">byte</span>[<span style="color: #800080;">2</span>*<span style="color: #000000;">_1MB];
+        allocation2</span>=new <span style="color: #0000ff;">byte</span>[<span style="color: #800080;">2</span>*<span style="color: #000000;">_1MB];
+        allocation3</span>=new <span style="color: #0000ff;">byte</span>[<span style="color: #800080;">2</span>*<span style="color: #000000;">_1MB];
+        allocation4</span>=new <span style="color: #0000ff;">byte</span>[<span style="color: #800080;">4</span>*_1MB]; <span style="color: #008000;">//</span><span style="color: #008000;">出现一次Minor GC</span>
+<span style="color: #000000;">    }
+}</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp;</p>
+<a name="_label2_0"></a><h2 id="autoid-4-0-0">1、输出到标准输出</h2>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>E:\javabase\out\production\javabase&gt;<span style="color: #ff0000;">java -XX:+PrintGCDetails -XX:+PrintGCDateSta
+mps  -Xms20M -Xmx20M -</span><span style="color: #000000;"><span style="color: #ff0000;">Xmn10M testAllocation</span>
+Heap
+ PSYoungGen      total 9216K, used 7644K [</span><span style="color: #800080;">0x00000000ff600000</span>, <span style="color: #800080;">0x0000000100000000</span><span style="color: #000000;">
+, </span><span style="color: #800080;">0x0000000100000000</span><span style="color: #000000;">)
+  eden space 8192K, </span><span style="color: #800080;">93</span>% used [<span style="color: #800080;">0x00000000ff600000</span>,<span style="color: #800080;">0x00000000ffd77070</span>,<span style="color: #800080;">0x00000000ff</span><span style="color: #000000;">
+e00000)
+  from space 1024K, </span><span style="color: #800080;">0</span>% used [<span style="color: #800080;">0x00000000fff00000</span>,<span style="color: #800080;">0x00000000fff00000</span>,<span style="color: #800080;">0x00000001000</span>
+<span style="color: #800080;">00000</span><span style="color: #000000;">)
+  to   space 1024K, </span><span style="color: #800080;">0</span>% used [<span style="color: #800080;">0x00000000ffe00000</span>,<span style="color: #800080;">0x00000000ffe00000</span>,<span style="color: #800080;">0x00000000fff</span>
+<span style="color: #800080;">00000</span><span style="color: #000000;">)
+ ParOldGen       total 10240K, used 4096K [</span><span style="color: #800080;">0x00000000fec00000</span>, <span style="color: #800080;">0x00000000ff60000</span>
+<span style="color: #800080;">0</span>, <span style="color: #800080;">0x00000000ff600000</span><span style="color: #000000;">)
+  </span><span style="color: #0000ff;">object</span> space 10240K, <span style="color: #800080;">40</span>% used [<span style="color: #800080;">0x00000000fec00000</span>,<span style="color: #800080;">0x00000000ff000010</span>,<span style="color: #800080;">0x0000000</span><span style="color: #000000;">
+0ff600000)
+ Metaspace       used 2521K, capacity 4486K, committed 4864K, reserved 1056768K
+  class space    used 271K, capacity 386K, committed 512K, reserved 1048576K</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp;</p>
+<a name="_label2_1"></a><h2 id="autoid-4-1-0">2、输出到文件</h2>
+<div class="cnblogs_code">
+<pre>E:\javabase\out\production\javabase&gt;java -XX:+PrintGCDetails -XX:+<span style="color: #000000;">PrintGCDateSta
+mps </span><span style="color: #ff0000;">-Xloggc:testAllocation-gc.log</span> -Xms20M -Xmx20M -Xmn10M testAllocation</pre>
+</div>
+<p><img src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/519126-20190105204040000-1671909761.png" alt=""></p>
+<p>&nbsp;</p>
+<p> </p><div class="articleFooter"><p>我是逐日，对于一线编码实战、网络、数据库、高并发等有浓厚兴趣。文章观点不一定对，如果有疑问的话，欢迎扫描下面的二维码加我微信，或者加入群聊，一起沟通交流。如果群二维码过期，或者图片加载不出来，可以直接加我微信，我拉进群：914000408</p><p><img src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/519126-20190701104330050-996095364.png"></p></div></div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block"><div id="BlogPostCategory">
+    分类: 
+            <a href="https://www.cnblogs.com/grey-wolf/category/1069893.html" target="_blank">Java虚拟机</a></div>
+
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(10216014,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;b137cb4d-bba8-e211-83e8-90b11c0b17d6&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/grey-wolf/" target="_blank"><img src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/20130419150320.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/grey-wolf/">三国梦回</a><br>
+            <a href="https://home.cnblogs.com/u/grey-wolf/followees/">关注 - 3</a><br>
+            <a href="https://home.cnblogs.com/u/grey-wolf/followers/">粉丝 - 53</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;b137cb4d-bba8-e211-83e8-90b11c0b17d6&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(10216014,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(10216014,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/grey-wolf/p/10222758.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/grey-wolf/p/10222758.html" title="发布于 2019-01-05 14:04">JVM垃圾收集器组合--各种组合对应的虚拟机参数实践</a>
+    <br>
+    <a href="https://www.cnblogs.com/grey-wolf/p/10226559.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/grey-wolf/p/10226559.html" title="发布于 2019-01-05 22:23">JVM学习--内存分配策略（持续更新）</a>
+
+</div>
+</div>
+		</div>
+		<div class="postDesc">posted @ 
+<span id="post-date">2019-01-05 21:15</span>&nbsp;<a href="https://www.cnblogs.com/grey-wolf/">三国梦回</a> 阅读(<span id="post_view_count">448</span>) 评论(<span id="post_comment_count">0</span>) <a href="https://i.cnblogs.com/EditPosts.aspx?postid=10216014" rel="nofollow"> 编辑</a> <a href="javascript:void(0)" onclick="AddToWz(10216014); return false;">收藏</a>
+</div>
+	</div>
+	
+	
+</div><!--end: topics 文章、评论容器-->
+<script src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 148538, cb_blogApp = 'grey-wolf', cb_blogUserGuid = 'b137cb4d-bba8-e211-83e8-90b11c0b17d6';
+    var cb_entryId = 10216014, cb_entryCreatedDate = '2019-01-05 21:15', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#top">返回顶部</a></div>
+    <div id="comment_form_container"><div class="login_tips">
+    注册用户登录后才能发表评论，请 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a>
+     或 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，
+    <a href="https://www.cnblogs.com/">访问</a> 网站首页。
+</div></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万C++/C#源码: 大型实时仿真组态图形源码</a><br><a href="http://clickc.admaster.com.cn/c/a131575,b3595121,c1705,i0,m101,8a1,8b3,h" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-华为云学生&#39;)">【推荐】华为云·云创校园套餐9元起，小天鹅音箱等你来拿</a><br><a href="http://clickc.admaster.com.cn/c/a131574,b3595115,c1705,i0,m101,8a1,8b3,h" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-华为云微认证&#39;)">【推荐】零基础轻松玩转云上产品，获壕礼加返百元大礼</a><br><a href="https://www.aliyun90.com/" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-aliyun90&#39;)">【推荐】ALIYUN90% | 免认证  9秒注册阿里云  即开即用</a><br></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="CKWz1_rnh-QCFRy_vQodYWwCsg"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/saved_resource.html"></iframe></div></div>
+    </div>
+    <div id="under_post_news"><div class="recomm-block"><b>相关博文：</b><br>·  <a title="JVM学习笔记——GC日志" href="https://www.cnblogs.com/qbzf-Blog/p/9577224.html" target="_blank" onclick="clickRecomItmem(9577224)">JVM学习笔记——GC日志</a><br>·  <a title="JVM学习之Eclipse输出GC日志" href="https://www.cnblogs.com/sunfie/p/5125511.html" target="_blank" onclick="clickRecomItmem(5125511)">JVM学习之Eclipse输出GC日志</a><br>·  <a title="浅析JVM中的GC日志" href="https://www.cnblogs.com/xuezhiyizu1120/p/6237510.html" target="_blank" onclick="clickRecomItmem(6237510)">浅析JVM中的GC日志</a><br>·  <a title="jvmgc日志解读" href="https://www.cnblogs.com/ytys/p/9811340.html" target="_blank" onclick="clickRecomItmem(9811340)">jvmgc日志解读</a><br>·  <a title="[JVM]GC日志学习" href="https://www.cnblogs.com/zhengwangzw/p/10512062.html" target="_blank" onclick="clickRecomItmem(10512062)">[JVM]GC日志学习</a><br></div></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CNb11frnh-QCFRy_vQodYWwCsg">
+            
+        <div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="2" data-load-complete="true" src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+    </div>
+    <div id="under_post_kb">
+<div class="itnews c_ad_block">
+    <b>最新 IT 新闻</b>:
+    <br>
+ ·              <a href="https://news.cnblogs.com/n/629769/" target="_blank">女子被中国电信永久封号 客服竟称因为路过诈骗窝点</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/629768/" target="_blank">Windows 10 更新导致 Visual Basic 应用程序停止响应</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/629767/" target="_blank">在这座岛屿上，物理学家发现了奇特的宝藏！</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/629765/" target="_blank">OPPO 组织架构大调整：一条明线，一条暗线</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/629764/" target="_blank">化学家合成出首个环状碳分子</a>
+            <br>
+    » <a href="https://news.cnblogs.com/" title="IT 新闻" target="_blank">更多新闻...</a>
+</div></div>
+    <div id="HistoryToday" class="c_ad_block">
+<b>历史上的今天：</b>
+<br>
+
+2019-01-05    <a href="https://www.cnblogs.com/grey-wolf/p/10226559.html">JVM学习--内存分配策略（持续更新）</a>
+    <br>
+2019-01-05    <a href="https://www.cnblogs.com/grey-wolf/p/10216014.html">JVM学习--开启应用的gc日志功能</a>
+    <br>
+2019-01-05    <a href="https://www.cnblogs.com/grey-wolf/p/10222758.html">JVM垃圾收集器组合--各种组合对应的虚拟机参数实践</a>
+    <br>
+</div>
+    <script type="text/javascript">
+        fixPostBody();
+        setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div></div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem"><!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	
+<div id="blog-news">
+    <script type="text/javascript">window['__document_write_ajax_callbacks__']['3']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['1']();</script>
+    <div id="profile_block">
+        昵称：
+        <a href="https://home.cnblogs.com/u/grey-wolf/">
+            三国梦回
+        </a>
+        <br>
+        园龄：
+        <a href="https://home.cnblogs.com/u/grey-wolf/" title="入园时间：2013-04-19">
+            6年3个月
+        </a>
+        <br>
+        粉丝：
+        <a href="https://home.cnblogs.com/u/grey-wolf/followers/">
+            53
+        </a>
+        <br>
+        关注：
+        <a href="https://home.cnblogs.com/u/grey-wolf/followees/">
+            3
+        </a>
+        <div id="p_b_follow">
+<a href="javascript:void(0)" onclick="follow(&#39;b137cb4d-bba8-e211-83e8-90b11c0b17d6&#39;)">+加关注</a></div>
+        <script type="text/javascript">window['__document_write_ajax_callbacks__']['4']();</script><script>window['__document_write_ajax_callbacks__']['2']();</script>
+    </div>
+</div>
+</div>
+
+</div>
+
+			<div id="calendar"><div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn">
+
+<!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    
+</div>
+
+<!-- 常用链接 -->
+
+
+<!-- 最新随笔 -->
+
+
+
+<!-- 我的标签 -->
+
+
+<!-- 积分与排名 -->
+<div id="sidebar_scorerank" class="sidebar-block">
+    <div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+        积分 -	
+186875
+    </li>
+	<li class="liRank">
+		排名 -	
+2166
+	</li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+    
+<div class="catListPostCategory">
+<h3 class="catListTitle">
+
+随笔分类
+<span style="font-size:11px;font-weight:normal">(221)</span>
+
+</h3>
+
+
+<ul>
+
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/1015545.html" rel="">
+    DAO层框架(9)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/978769.html" rel="">
+    Java基础(4)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/1069893.html" rel="">
+    Java虚拟机(23)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/956401.html" rel="">
+    Linux运维(28)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/1036399.html" rel="">
+    Netty重器(2)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/1141522.html" rel="">
+    Spring全家桶(10)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/957760.html" rel="">
+    Tomcat&amp;Servlet(22)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/957856.html" rel="">
+    Web&amp;HTTP(13)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/1202118.html" rel="">
+    持续集成(14)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/982539.html" rel="">
+    工具Jar包(1)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/979444.html" rel="">
+    缓存银弹(11)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/1181275.html" rel="">
+    接入层技术(2)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/971151.html" rel="">
+    开发工具(19)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/974377.html" rel="">
+    日志框架(7)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/974999.html" rel="">
+    软件工程(4)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/970840.html" rel="">
+    数据库(32)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/1326545.html" rel="">
+    网络编程(8)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/1141521.html" rel="">
+    微服务(3)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/1405497.html" rel="">
+    消息中间件(7)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/grey-wolf/category/1384776.html" rel="">
+    性能(2)
+</a>
+ 
+</li>
+
+</ul>
+
+
+</div>
+
+
+</div>
+
+<!-- 最新评论 -->
+
+
+
+
+<!-- 阅读排行榜 -->
+
+
+<!-- 评论排行榜 -->
+
+
+<!-- 推荐排行榜 -->
+</div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright © 2019 三国梦回
+    <div id="poweredby">Powered by .NET Core 3.0 Preview 8 on Linux</div>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <script src="./JVM学习--开启应用的gc日志功能 - 三国梦回 - 博客园_files/bootstrap.min.js"></script>
+<script language="javascript" type="text/javascript">
+function GenerateContentList() {
+    var mainContent = $('#cnblogs_post_body');
+    var h2_list =$('#cnblogs_post_body h1');
+    if (mainContent.length < 1) return;
+    if (h2_list.length > 0) {
+        var content = '<a name="_labelTop"></a>';
+        content += '<div id="navCategory">';
+        content += '<p style="font-size:18px"><h1>阅读目录</h1></p>';
+        content += '<ul>';
+        for (var i = 0; i < h2_list.length; i++) {
+            var go_to_top = '<div style="text-align: right"><a href="#_labelTop">回到顶部</a><a name="_label' + i + '"></a></div>';
+            $(h2_list[i]).before(go_to_top);
+            var h3_list = $(h2_list[i]).nextAll("h2");
+            var li3_content = '';
+            for (var j = 0; j < h3_list.length; j++) {
+                var tmp = $(h3_list[j]).prevAll('h1').first();
+                if (!tmp.is(h2_list[i])) 
+                    break;
+                var li3_anchor = '<a name="_label' + i + '_' + j + '"></a>';
+                $(h3_list[j]).before(li3_anchor);
+                li3_content += '<li><a href="#_label' + i + '_' + j + '">' + $(h3_list[j]).text() + '</a></li>'
+            }
+            var li2_content = '';
+            if (li3_content.length > 0) 
+            li2_content = '<li><a href="#_label' + i + '">' + $(h2_list[i]).text() + '</a><ul>' + li3_content + '</ul></li>';
+            else 
+            li2_content = '<li><a href="#_label' + i + '">' + $(h2_list[i]).text() + '</a></li>';
+            content += li2_content;
+        }
+        content += '</ul>';
+        content += '</div><p> </p>';
+    }
+    var html = '<p> </p><div class="articleFooter">';
+    html += "<p>我是逐日，对于一线编码实战、网络、数据库、高并发等有浓厚兴趣。文章观点不一定对，如果有疑问的话，欢迎扫描下面的二维码加我微信，或者加入群聊，一起沟通交流。如果群二维码过期，或者图片加载不出来，可以直接加我微信，我拉进群：914000408</p>";
+    html += "<p><img src='https://img2018.cnblogs.com/blog/519126/201907/519126-20190701104330050-996095364.png' ></p>";
+
+
+    html += "</div>";
+    if($('#cnblogs_post_body').length != 0) {
+        $($('#cnblogs_post_body')[0]).prepend(content);
+        $($('#cnblogs_post_body')[0]).append(html)
+    }
+}
+GenerateContentList();
+</script>
+    </div>
+
+
+<script type="text/javascript">
+
+if ("https://www.cnblogs.com/grey-wolf/" == window.location.href){
+   
+}else{
+
+
+//以下是锚点JS
+var a = $(document);
+a.ready(function() {
+    var b = $('body'),
+        d = 'sideToolbar',
+        e = 'sideCatalog',
+        f = 'sideCatalog-catalog',
+        g = 'sideCatalogBtn',
+        h = 'sideToolbar-up',
+        i = '<div id="sideToolbar"style="display:none;">\<div class="sideCatalogBg"id="sideCatalog">\<div id="sideCatalog-sidebar">\<div class="sideCatalog-sidebar-top"></div>\<div class="sideCatalog-sidebar-bottom"></div>\</div>\<div id="sideCatalog-catalog">\<ul class="nav"style="width:225px;zoom:1">\</ul>\</div>\</div>\</div><div id="sideCatalogBtn" class="sideCatalogBtnDisable"></div>',
+		j = '',
+        k = 200,
+        l = 0,
+        m = 0,
+        n = 0,
+        //限制存在个数，如数量过多，则只显示h2，不显示h3
+        //o, p = 13,
+        o, p = 100,
+        q = true,
+        r = true,
+        s = b;
+    if(s.length === 0) {
+        return
+    };
+    b.append(i);
+    //指定获取目录的范围-------------这一点非常重要，因为每个人指定的范围都不一样，所以这是要修改的地方
+    o = $('#cnblogs_post_body').find(':header')
+    if(o.length > p) {
+        r = false;
+        var t = s.find('h1');
+        var u = s.find('h2');
+        if(t.length + u.length > p) {
+            q = false
+        }
+    };
+    o.each(function(t) {
+        var u = $(this),
+            v = u[0];
+
+        var title = u.text();
+        var text = u.text();
+
+        u.attr('id', 'autoid-' + l + '-' + m + '-' + n)
+        //if (!u.attr('id')) {
+        //    u.attr('id', 'autoid-' + l + '-' + m + '-' + n)
+        //};
+        if(v.localName === 'h1') {
+            l++;
+            m = 0;
+            if(text.length > 14) text = text.substr(0, 20) + "...";
+            j += '<li><span>' + l + '&nbsp&nbsp</span><a href="#' + u.attr('id') + '" title="' + title + '">' + text + '</a><span class="sideCatalog-dot"></span></li>';
+        } else if(v.localName === 'h2') {
+            m++;
+            n = 0;
+            if(q) {
+                if(text.length > 12) text = text.substr(0, 16) + "...";
+                j += '<li class="h2Offset"><span>' + l + '.' + m + '&nbsp&nbsp</span><a href="#' + u.attr('id') + '" title="' + title + '">' + text + '</a></li>';
+            }
+        } else if(v.localName === 'h3') {
+            n++;
+            if(r) {
+                j += '<li class="h3Offset"><span>' + l + '.' + m + '.' + n + '&nbsp&nbsp</span><a href="#' + u.attr('id') + '" title="' + title + '">' + u.text() + '</a></li>';
+            }
+        }
+    });
+    $('#' + f + '>ul').html(j);
+    b.data('spy', 'scroll');
+    b.data('target', '.sideCatalogBg');
+    $('body').scrollspy({
+        target: '.sideCatalogBg'
+    });
+    $sideCatelog = $('#' + e);
+    $('#' + g).on('click', function() {
+        if($(this).hasClass('sideCatalogBtnDisable')) {
+            $sideCatelog.css('visibility', 'hidden')
+			$("#sideToolbar").css('position','static')
+        } else {
+            $sideCatelog.css('visibility', 'visible')
+			$("#sideToolbar").css('position','fixed')
+        };
+        $(this).toggleClass('sideCatalogBtnDisable')
+    });
+    $('#' + h).on('click', function() {
+        $("html,body").animate({
+            scrollTop: 0
+        }, 500)
+    });
+    $sideToolbar = $('#' + d);
+    a.on('scroll', function() {
+        var t = a.scrollTop();
+        if(t > k) {
+            $sideToolbar.css('display', 'block');
+            $('#gotop').show()
+        } else {
+           
+            $('#gotop').hide()
+        }
+    })
+});
+//以上是锚点JS
+//以下是返回顶部JS
+$(function() {
+    $('body').append('<div id="gotop" onclick="goTop();"></div>');
+    /*//把这里转移到了目录CSS中，这样就可以同步了
+    $(window).scroll(function () {
+                    300 < $(this).scrollTop() ?
+                    $('#gotop').show(): $('#gotop').hide()
+                });
+    */
+});
+
+function goTop(u, t, r) {
+    var scrollActivate = !0;
+    if(scrollActivate) {
+        u = u || 0.1;
+        t = t || 16;
+        var s = 0,
+            q = 0,
+            o = 0,
+            p = 0,
+            n = 0,
+            j = 0;
+        document.documentElement && (s = document.documentElement.scrollLeft || 0, q = document.documentElement.scrollTop || 0);
+        document.body && (o = document.body.scrollLeft || 0, p = document.body.scrollTop || 0);
+        n = window.scrollX || 0;
+        j = window.scrollY || 0;
+        s = Math.max(s, Math.max(o, n));
+        q = Math.max(q, Math.max(p, j));
+        p = 1 + u;
+        window.scrollTo(Math.floor(s / p), Math.floor(q / p));
+        0 < s || 0 < q ? window.setTimeout('goTop(' + u + ', ' + t + ')', t) : 'undefined' != typeof r && r()
+    } else {
+        scrollActivate = !0
+    }
+}
+//以上是返回顶部JS
+
+}
+</script><div id="sideToolbar" style="display: block;"><div class="sideCatalogBg" id="sideCatalog"><div id="sideCatalog-sidebar"><div class="sideCatalog-sidebar-top"></div><div class="sideCatalog-sidebar-bottom"></div></div><div id="sideCatalog-catalog"><ul class="nav" style="width:225px;zoom:1"><li><span>1&nbsp;&nbsp;</span><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#autoid-0-0-0" title="阅读目录">阅读目录</a><span class="sideCatalog-dot"></span></li><li><span>2&nbsp;&nbsp;</span><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#autoid-1-0-0" title="一、开启方法">一、开启方法</a><span class="sideCatalog-dot"></span></li><li><span>3&nbsp;&nbsp;</span><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#autoid-2-0-0" title=" ">&nbsp;</a><span class="sideCatalog-dot"></span></li><li><span>4&nbsp;&nbsp;</span><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#autoid-3-0-0" title="二、测试">二、测试</a><span class="sideCatalog-dot"></span></li><li class="h2Offset"><span>4.1&nbsp;&nbsp;</span><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#autoid-4-0-0" title="1、输出到标准输出">1、输出到标准输出</a></li><li class="h2Offset"><span>4.2&nbsp;&nbsp;</span><a href="https://www.cnblogs.com/grey-wolf/p/10216014.html#autoid-4-1-0" title="2、输出到文件">2、输出到文件</a></li></ul></div></div></div><div id="sideCatalogBtn" class="sideCatalogBtnDisable"></div><div id="gotop" onclick="goTop();" style="display: block;"></div><script type="text/javascript">getFollowStatus('b137cb4d-bba8-e211-83e8-90b11c0b17d6');</script></body></html>
